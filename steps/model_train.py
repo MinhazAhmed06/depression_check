@@ -17,8 +17,9 @@ def train_model(
     try:
         model = None
         if config.selected_model == 'LinearRegression':
+            config = config.params
             model = LinearRegressionModel()
-            trained_model = model.fit(X_train, y_train)
+            trained_model = model.train(X_train, y_train, **config)
             return trained_model
         else:
             raise ValueError(f'Model {config.selected_model} is not supported!')

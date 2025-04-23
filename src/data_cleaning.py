@@ -30,6 +30,7 @@ class DataPrepStrat(DataStrat):
                                 else 0))
             data['Have you ever had suicidal thoughts ?'] = data['Have you ever had suicidal thoughts ?'].apply(lambda x:1 if x == 'Yes' else 0)
             data['Family History of Mental Illness'] = data['Family History of Mental Illness'].apply(lambda x:1 if x == 'Yes' else 0)
+            data = data.select_dtypes(include=[np.number])
             return data
 
         except Exception as e:
