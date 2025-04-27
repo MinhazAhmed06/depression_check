@@ -1,4 +1,5 @@
 import click
+from typing import cast
 from pipelines.deployment_pipeline import continuous_deployment_pipeline#, inference_pipeline
 from rich import print
 from zenml.integrations.mlflow.mlflow_utils import get_tracking_uri
@@ -30,14 +31,14 @@ def run_deployment(config: str, min_accuracy: float):
     deploy = config == DEPLOY or config == DEPLOY_AND_PREDICT
     predict = config == PREDICT or config == DEPLOY_AND_PREDICT
 
-    if DEPLOY:
+    if deploy:
         continuous_deployment_pipeline(
             data_path = 'data/student_depression_dataset.csv',
             min_accuracy = min_accuracy,
             workers = 3,
             timeout = 60,
             )
-    # if PREDICT:
+    # if predict:
     #     inference_pipeline()
 
     print('You can run:\n'
