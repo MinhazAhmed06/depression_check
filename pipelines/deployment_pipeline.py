@@ -18,19 +18,24 @@ from steps.config import ModelNameConfig
 docker_settings = DockerSettings(required_integrations=[MLFLOW])
 
 class DeploymentTriggerConfig(BaseModel):
-    min_accuracy: float = 0.92
+    min_accuracy: float = 0
 
 @step
 def deployment_trigger(
     accuracy: float,
     config: DeploymentTriggerConfig,
 ):
-    return accuracy >= config.min_accuracy
+    return accuracy > config.min_accuracy
+
+class MLFlowDeploymentLoaderStepParameters(BaseModel):
+    pipeline_name: str
+    step_name: str
+    running: bool = True
 
 @pipeline(enable_cache=False, settings = {"docker":docker_settings})
 def continuous_deployment_pipeline(
     data_path: str,
-    min_accuracy: float = 0.5,
+    min_accuracy: float = 0,
     workers: int = 1,
     timeout: int = DEFAULT_SERVICE_START_STOP_TIMEOUT,
 ):

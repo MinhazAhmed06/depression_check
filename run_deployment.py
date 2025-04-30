@@ -57,11 +57,11 @@ def run_deployment(config: str, min_accuracy: float):
         service = cast(MLFlowDeploymentService, existing_services[0])
         if service.is_running:
             print(
-                f"The MLflow prediction server is running locally as a daemon "
-                f"process service and accepts inference requests at: \n"
+                "The MLflow prediction server is running locally as a daemon "
+                "process service and accepts inference requests at: \n"
                 f"{service.prediction_url}\n"
-                f"To stop the service, run"
-                f"[italic green) zenml model-deployer models delete "
+                "To stop the service, run"
+                "[italic green) zenml model-deployer models delete "
                 f"{str(service.uuid)}`[/italic green].")
         elif service.is_failed:
             print(
