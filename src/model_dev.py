@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression
 
 class Model(ABC):
     @abstractmethod
@@ -19,3 +19,13 @@ class LinearRegressionModel(Model):
             logging.error(f'Error while training the model: {e}')
             raise e
         
+class LogisticRegressionModel(Model):
+    def train(self, X_train, y_train, **kwargs):
+        try:
+            clf = LogisticRegression(**kwargs)
+            clf.fit(X_train, y_train)
+            logging.info("Model training completed.")
+            return clf
+        except Exception as e:
+            logging.error(f'Error while training the model: {e}')
+            raise e

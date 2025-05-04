@@ -7,7 +7,7 @@ from zenml import step
 from zenml.client import Client 
 import mlflow
 
-from sklearn.base import RegressorMixin
+from sklearn.base import RegressorMixin, BaseEstimator
 from src.eval import MSE, R2, RMSE
 
 
@@ -15,7 +15,7 @@ experiment_tracker = Client().active_stack.experiment_tracker
 
 @step(experiment_tracker = experiment_tracker.name)
 def evaluate_model(
-    model: RegressorMixin,
+    model: BaseEstimator,
     X_test: pd.DataFrame,
     y_test: pd.Series
 ) -> Tuple[

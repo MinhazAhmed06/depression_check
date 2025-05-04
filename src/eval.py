@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 from abc import ABC, abstractmethod
-from sklearn.metrics import mean_squared_error, r2_score, root_mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
 class Evaluation(ABC):
     @abstractmethod
@@ -34,7 +34,7 @@ class RMSE(Evaluation):
     def calculate_score(self, y_true: np.ndarray, y_pred: np.ndarray):
         try:
             logging.info('Calculating RMSE.')
-            rmse = root_mean_squared_error(y_true, y_pred)
+            rmse = np.sqrt(mean_squared_error(y_true, y_pred))
             logging.info(f'RMSE: {rmse}')
             return rmse
         except Exception as e:

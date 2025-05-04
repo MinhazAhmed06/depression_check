@@ -21,12 +21,12 @@ DEPLOY_AND_PREDICT = 'deploy_and_predict'
             ('deploy_and_predict')''',
 )
 @click.option(
-    '--min-accuracy',
+    '--min-r2',
     default = 0.5,
-    help = 'minimum accuracy required to deploy the model',
+    help = 'minimum r2 required to deploy the model',
 )
 
-def run_deployment(config: str, min_accuracy: float):
+def run_deployment(config: str, min_r2: float):
     mlflow_model_deployer_component = MLFlowModelDeployer.get_active_model_deployer()
     deploy = config == DEPLOY or config == DEPLOY_AND_PREDICT
     predict = config == PREDICT or config == DEPLOY_AND_PREDICT
@@ -34,7 +34,7 @@ def run_deployment(config: str, min_accuracy: float):
     if deploy:
         continuous_deployment_pipeline(
             data_path = 'data/student_depression_dataset.csv',
-            min_accuracy = min_accuracy,
+            min_r2 = min_r2,
             workers = 3,
             timeout = 60,
             )
@@ -68,7 +68,7 @@ def run_deployment(config: str, min_accuracy: float):
                 f"{str(service.uuid)}`[/italic green].")
         elif service.is_failed:
             print(
-                f"The MLflow prediction server is in a failed state: \n"
+                "The MLflow prediction server is in a failed state: \n"
                 f" Last state: '{service.status.state.value}'\n"
                 f" Last error: '{service.status.last_error}'")
     else:

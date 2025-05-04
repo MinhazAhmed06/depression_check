@@ -21,8 +21,8 @@ from pipelines.utils import get_data_for_test
 docker_settings = DockerSettings(required_integrations=[MLFLOW])
 
 class DeploymentTriggerConfig(BaseModel):
-    min_accuracy: float = 0
-
+    min_r2: float = 0.5 
+    
 @step(enable_cache=False)
 def dynamic_importer() -> str:
     data = get_data_for_test()
@@ -30,10 +30,10 @@ def dynamic_importer() -> str:
 
 @step
 def deployment_trigger(
-    accuracy: float,
+    r2: float,
     config: DeploymentTriggerConfig,
 ):
-    return accuracy > config.min_accuracy
+    return r2 > config.min_r2
 
 class MLFlowDeploymentLoaderStepParameters(BaseModel):
     pipeline_name: str
@@ -73,20 +73,9 @@ def predictor(
     data = json.loads(data)
     data.pop('columns')
     data.pop('index')
-    columns_for_df = [
-        "payment_sequential",
-        "payment_installments",
-        "payment_value",
-        "price",
-        "freight_value",
-        "product_name_lenght",
-        "product_description_lenght",
-        "product_photos_qty",
-        "product_weight_g",
-        "product_length_cm",
-        "product_height_cm",
-        "product_width_cm",
-    ]
+    columns_for_df = ['Gender','Age','Academic Pressure','CGPA','Study Satisfaction',
+                        'Sleep Duration','Dietary Habits','Have you ever had suicidal thoughts ?',
+                        'Work/Study Hours','Financial Stress','Family History of Mental Illness','Depression']
     df = pd.DataFrame(data['data'], columns=columns_for_df)
     json_list = json.loads(json.dumps(list(df.T.to_dict().values())))
     data = np.array(json_list)
@@ -96,7 +85,7 @@ def predictor(
 @pipeline(enable_cache=False, settings = {"docker":docker_settings})
 def continuous_deployment_pipeline(
     data_path: str,
-    min_accuracy: float = 0,
+    min_r2: float = 0.5,
     workers: int = 1,
     timeout: int = DEFAULT_SERVICE_START_STOP_TIMEOUT,
 ):
@@ -105,7 +94,7 @@ def continuous_deployment_pipeline(
     model_config = ModelNameConfig()
     model = train_model(X_train, y_train, model_config)
     mse, r2, rmse = evaluate_model(model, X_test, y_test)
-    dtconfig = DeploymentTriggerConfig()
+    dtconfig = DeploymentTriggerConfig(min_r2=min_r2)
     deploy_decision = deployment_trigger(r2, dtconfig)
     mlflow_model_deployer_step(
         model = model,
