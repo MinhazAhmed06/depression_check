@@ -73,10 +73,9 @@ def predictor(
     data = json.loads(data)
     data.pop('columns')
     data.pop('index')
-    columns_for_df = ['id','Gender','Age','City','Profession','Academic Pressure','Work Pressure',
-                      'CGPA','Study Satisfaction','Job Satisfaction','Sleep Duration','Dietary Habits',
-                      'Degree','Have you ever had suicidal thoughts ?','Work/Study Hours','Financial Stress',
-                      'Family History of Mental Illness','Depression']
+    columns_for_df = ['Gender','Age','Academic Pressure','CGPA','Study Satisfaction','Sleep Duration','Dietary Habits',
+                      'Have you ever had suicidal thoughts ?','Study Hours','Financial Stress',
+                      'Family History of Mental Illness']
     df = pd.DataFrame(data['data'], columns=columns_for_df)
     json_list = json.loads(json.dumps(list(df.T.to_dict().values())))
     data = np.array(json_list)

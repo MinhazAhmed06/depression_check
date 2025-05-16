@@ -45,10 +45,10 @@ def run_deployment(config: str, min_r2: float):
         )
 
     print('You can run:\n'
-            f"[italic green] mlflow ui --backend-store-uri '{get_tracking_uri}'\n"
-            "[itaic green]...to inspect your experiment runs within the mlflow UI.\n"
-            'You can find your runs within the mlflow_example_pipeline experiment.'
-            'There you will also be able to compare two or more runs.\n')
+            f"[italic green]mlflow ui --backend-store-uri '{get_tracking_uri}'[/italic green]\n"
+        "[italic green]...to inspect your experiment runs within the mlflow UI.[/italic green]\n"
+        'You can find your runs within the mlflow_example_pipeline experiment.'
+        'There you will also be able to compare two or more runs.\n')
 
     existing_services = mlflow_model_deployer_component.find_model_server(
         pipeline_name='continuous_deployment_pipeline',
