@@ -8,3 +8,5 @@ zenml model-deployer register mlflow --flavor=mlflow
 zenml stack register mlflow_stack -a default -o default -d mlflow -e mlflow_tracker --set
 
 mlflow ui --backend-store-uri "[given_uri]"
+
+python run_deployment.py -config deploy

@@ -93,9 +93,9 @@ def continuous_deployment_pipeline(
     X_train, X_test, y_train, y_test = clean_df(df)
     model_config = ModelNameConfig()
     model = train_model(X_train, y_train, model_config)
-    mse, r2, rmse = evaluate_model(model, X_test, y_test)
+    precision, recall, f1score = evaluate_model(model, X_test, y_test)
     dtconfig = DeploymentTriggerConfig(min_r2=min_r2)
-    deploy_decision = deployment_trigger(r2, dtconfig)
+    deploy_decision = deployment_trigger(f1score, dtconfig)
     mlflow_model_deployer_step(
         model = model,
         deploy_decision = deploy_decision,
