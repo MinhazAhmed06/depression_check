@@ -9,4 +9,4 @@ zenml stack register mlflow_stack -a default -o default -d mlflow -e mlflow_trac
 
 mlflow ui --backend-store-uri "[given_uri]"
 
-python run_deployment.py -config deploy
+python run_deployment.py --config deploy

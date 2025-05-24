@@ -26,7 +26,7 @@ DEPLOY_AND_PREDICT = 'deploy_and_predict'
     help = 'minimum r2 required to deploy the model',
 )
 
-def run_deployment(config: str, min_r2: float):
+def run_deployment(config: str, min_f1s: float):
     mlflow_model_deployer_component = MLFlowModelDeployer.get_active_model_deployer()
     deploy = config == DEPLOY or config == DEPLOY_AND_PREDICT
     predict = config == PREDICT or config == DEPLOY_AND_PREDICT
@@ -34,7 +34,7 @@ def run_deployment(config: str, min_r2: float):
     if deploy:
         continuous_deployment_pipeline(
             data_path = 'data/student_depression_dataset.csv',
-            min_r2 = min_r2,
+            min_f1s = min_f1s,
             workers = 3,
             timeout = 60,
             )

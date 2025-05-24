@@ -21,7 +21,7 @@ from pipelines.utils import get_data_for_test
 docker_settings = DockerSettings(required_integrations=[MLFLOW])
 
 class DeploymentTriggerConfig(BaseModel):
-    min_r2: float = 0.5 
+    min_f1s: float = 0.8
     
 @step(enable_cache=False)
 def dynamic_importer() -> str:
@@ -30,10 +30,10 @@ def dynamic_importer() -> str:
 
 @step
 def deployment_trigger(
-    r2: float,
+    f1s: float,
     config: DeploymentTriggerConfig,
 ):
-    return r2 > config.min_r2
+    return f1s > config.min_f1s
 
 class MLFlowDeploymentLoaderStepParameters(BaseModel):
     pipeline_name: str
@@ -79,13 +79,15 @@ def predictor(
     df = pd.DataFrame(data['data'], columns=columns_for_df)
     json_list = json.loads(json.dumps(list(df.T.to_dict().values())))
     data = np.array(json_list)
+    print(f"df type: {type(df)}")
+    print(f"df.values type: {type(df.values)}")
     prediction = service.predict(data)
     return prediction
 
 @pipeline(enable_cache=False, settings = {"docker":docker_settings})
 def continuous_deployment_pipeline(
     data_path: str,
-    min_r2: float = 0.5,
+    min_f1s: float = 0.8,
     workers: int = 1,
     timeout: int = DEFAULT_SERVICE_START_STOP_TIMEOUT,
 ):
@@ -94,7 +96,7 @@ def continuous_deployment_pipeline(
     model_config = ModelNameConfig()
     model = train_model(X_train, y_train, model_config)
     precision, recall, f1score = evaluate_model(model, X_test, y_test)
-    dtconfig = DeploymentTriggerConfig(min_r2=min_r2)
+    dtconfig = DeploymentTriggerConfig(min_f1s = min_f1s)
     deploy_decision = deployment_trigger(f1score, dtconfig)
     mlflow_model_deployer_step(
         model = model,
