@@ -17,6 +17,7 @@ class DataPrepStrat(DataStrat):
             data = data[data['Profession'] == 'Student']
             data = data.drop(['id','City','Profession','Work Pressure','Job Satisfaction','Degree'], axis=1)
             data['Gender'] = data['Gender'].apply(lambda x: 1 if x == 'Male' else 0)
+            data['Financial Stress'] = data['Financial Stress'].astype(float)
             data = data[data['Sleep Duration'] != 'Others']
             data['Sleep Duration'] = data['Sleep Duration'].apply(
                         lambda x: (3 if 'More than 8 hours' in x 

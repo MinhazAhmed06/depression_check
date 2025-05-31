@@ -8,7 +8,7 @@ class Evaluation(ABC):
     def calculate_score(self, y_true: np.ndarray, y_pred: np.ndarray):
         pass
         
-class precision(Evaluation):
+class Precision(Evaluation):
     def calculate_score(self, y_true, y_pred):
         try:
             logging.info('Calculating precision.')
@@ -19,7 +19,7 @@ class precision(Evaluation):
             logging.error(f'Error while calculating precision {e}')
             raise e
         
-class recall(Evaluation):
+class Recall(Evaluation):
     def calculate_score(self, y_true, y_pred):
         try:
             logging.info('Calculating recall.')
@@ -30,7 +30,7 @@ class recall(Evaluation):
             logging.error(f'Error while calculating recall {e}')
             raise e
         
-class f1score(Evaluation):
+class F1score(Evaluation):
     def calculate_score(self, y_true, y_pred):
         try:
             logging.info('Calculating f1_score.')

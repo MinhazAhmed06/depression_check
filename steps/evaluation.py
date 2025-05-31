@@ -8,7 +8,7 @@ from zenml.client import Client
 import mlflow
 
 from sklearn.base import BaseEstimator
-from src.eval import precision, recall, f1score
+from src.eval import Precision, Recall, F1score
 
 
 experiment_tracker = Client().active_stack.experiment_tracker
@@ -25,11 +25,11 @@ def evaluate_model(
 ]:
     try:
         prediction = model.predict(X_test)
-        prec = precision().calculate_score(y_test, prediction)
+        prec = Precision().calculate_score(y_test, prediction)
         mlflow.log_metric('precision', prec)
-        rec = recall().calculate_score(y_test, prediction)
+        rec = Recall().calculate_score(y_test, prediction)
         mlflow.log_metric('recall', rec)
-        f1s = f1score().calculate_score(y_test, prediction)
+        f1s = F1score().calculate_score(y_test, prediction)
         mlflow.log_metric('f1score', f1s)
         return prec, rec, f1s
     except Exception as e:

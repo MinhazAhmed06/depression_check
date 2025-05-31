@@ -21,9 +21,9 @@ DEPLOY_AND_PREDICT = 'deploy_and_predict'
             ('deploy_and_predict')''',
 )
 @click.option(
-    '--min-r2',
-    default = 0.5,
-    help = 'minimum r2 required to deploy the model',
+    '--min-f1s',
+    default = 0.8,
+    help = 'minimum f1_score required to deploy the model',
 )
 
 def run_deployment(config: str, min_f1s: float):
@@ -45,7 +45,7 @@ def run_deployment(config: str, min_f1s: float):
         )
 
     print('You can run:\n'
-            f"[italic green]mlflow ui --backend-store-uri '{get_tracking_uri}'[/italic green]\n"
+            f"[italic green]mlflow ui --backend-store-uri '{get_tracking_uri()}'[/italic green]\n"
         "[italic green]...to inspect your experiment runs within the mlflow UI.[/italic green]\n"
         'You can find your runs within the mlflow_example_pipeline experiment.'
         'There you will also be able to compare two or more runs.\n')
